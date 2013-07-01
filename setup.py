@@ -7,4 +7,10 @@ setup(name="google-jawa",
       packages=["google_jawa"],
       install_requires=['libgreader'],
       include_package_data=True,
-      zip_safe=False)
+      zip_safe=False,
+      classifiers=[
+          "Development Status :: 4 - Beta",
+          "License :: OSI Approved :: MIT License",
+          "Intended Audience :: Developers",
+          "Natural Language :: English",
+          "Programming Language :: Python"])
