@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import sys
+import argparse
+import getpass
+
+import libgreader as gr
+import google_jawa as gj
+
+
+def get_reader(opts):
+    auth = gr.ClientAuthMethod(opts.username, opts.password)
+    reader = gr.GoogleReader(auth)
+    reader.getUserInfo()
+    return reader
+
+
+def main():
+    p = argparse.ArgumentParser()
+    p.add_argument("username", metavar="USERNAME")
+    p.add_argument("-p", "--password")
+    p.add_argument("-d", "--directory", default=".",
+                   help="Output directory for backup")
+
+    opts = p.parse_args()
+    if not opts.password:
+        opts.password = getpass.getpass("Password: ")
+
+    try:
+        reader = get_reader(opts)
+    except IOError:
+        print >>sys.stderr, "Invalid Credentials"
+        sys.exit(1)
+
+    store = gj.DirectoryStore(opts.directory)
+    archiver = gj.GReaderArchiver(reader, store)
+    archiver.archive_account()
+
+
+if __name__ == '__main__':
+    main()
